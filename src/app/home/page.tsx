@@ -30,12 +30,20 @@ const HomePage = () => {
         setStockData(data);
         const newsData = await fetchNewsData(stock);
         setNewsArticles(newsData);
-
+  
         const predictionData = await fetchStockPrediction(stock);
         console.log(predictionData);
-        setPredictions(predictionData.predictions);
-        setSentiment(predictionData.sentiment); // Set sentiment from API response
-        setArticleSummary(predictionData.article_titles_summary); // Set all predictions received
+  
+        // Check if predictionData.sentiment is defined before setting state
+        if (predictionData && predictionData.sentiment !== undefined) {
+          setSentiment(predictionData.sentiment);
+        }
+        if (predictionData && predictionData.article_titles_summary) {
+          setArticleSummary(predictionData.article_titles_summary);
+        }
+        if (predictionData && predictionData.predictions) {
+          setPredictions(predictionData.predictions);
+        }
       }
     };
 
