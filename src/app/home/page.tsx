@@ -1,7 +1,7 @@
 "use client";
 import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
 import { motion } from 'framer-motion';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Box, Container, Typography, Card, CardContent, useTheme } from '@mui/material';
 import SearchBar from '../components/SearchBar';
@@ -11,31 +11,43 @@ import { fetchNewsData } from '../utils/fetchNewsData';
 import { fetchStockPrediction } from '../utils/fetchStockPrediction';
 import ThemeDropdown from '../components/ThemeDropdown';
 import StockAnalysis from '../components/StockAnalysis';
-import { Suspense } from 'react';
 
 const HomePage = () => {
   const theme = useTheme();
-  const searchParams = useSearchParams();
-  const stock = searchParams.get('stock');
   const [stockData, setStockData] = useState<{ date: string, price: number }[]>([]);
   const [newsArticles, setNewsArticles] = useState<any[]>([]);
   const [predictions, setPredictions] = useState<number[]>([]);
   const [arrowBob, setArrowBob] = useState<boolean>(false);
   const [sentiment, setSentiment] = useState<number>(0);
-  const [articleSummary, setArticleSummary] = useState<string>(''); // State for arrow animation
+  const [articleSummary, setArticleSummary] = useState<string>('');
+
+  // Fetching stock parameter from URL query parameters
+  const [stock, setStock] = useState<string | null>(null);
+  const [searchParamsLoaded, setSearchParamsLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadSearchParams = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const stockParam = params.get('stock');
+      if (stockParam) {
+        setStock(stockParam);
+      }
+      setSearchParamsLoaded(true);
+    };
+
+    loadSearchParams();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       if (stock) {
         const data = await fetchStockData(stock);
         setStockData(data);
+
         const newsData = await fetchNewsData(stock);
         setNewsArticles(newsData);
 
         const predictionData = await fetchStockPrediction(stock);
-        console.log(predictionData);
-
-        // Check if predictionData.sentiment is defined before setting state
         if (predictionData && predictionData.sentiment !== undefined) {
           setSentiment(predictionData.sentiment);
         }
@@ -53,9 +65,8 @@ const HomePage = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      // Toggle arrowBob state every 3 seconds
-      setArrowBob((prev) => !prev);
-    }, 3000); // Adjust the interval as needed
+      setArrowBob(prev => !prev);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
@@ -70,14 +81,17 @@ const HomePage = () => {
     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeInOut' } },
   };
 
+  if (!searchParamsLoaded) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <Suspense>
     <Container
       sx={{
         height: '100vh',
         backgroundColor: theme.palette.background.default,
-        paddingTop: '64px', // Adjust as per your layout needs
-        paddingRight: '8px', // Adjust as per your layout needs
+        paddingTop: '64px',
+        paddingRight: '8px',
       }}
     >
       <Box alignContent="center" display="flex" justifyContent="space-between">
@@ -98,7 +112,6 @@ const HomePage = () => {
           mt={4}
           sx={{ height: 'calc(100% - 64px)' }}
         >
-          {/* Display prediction */}
           {predictions.length > 0 ? (
             <Box
               display="flex"
@@ -119,7 +132,7 @@ const HomePage = () => {
                   animate={{ opacity: 0, scale: 1 }}
                   transition={{ duration: 0.5 }}
                   style={{ color: 'green' }}
-                  whileHover={{ y: arrowBob ? -3 : 3 }} // Bobbing animation
+                  whileHover={{ y: arrowBob ? -3 : 3 }}
                 >
                   <ArrowUpward fontSize="large" />
                 </motion.div>
@@ -129,7 +142,7 @@ const HomePage = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
                   style={{ color: 'red' }}
-                  whileHover={{ y: arrowBob ? -3 : 3 }} // Bobbing animation
+                  whileHover={{ y: arrowBob ? -3 : 3 }}
                 >
                   <ArrowDownward fontSize="large" />
                 </motion.div>
@@ -241,7 +254,6 @@ const HomePage = () => {
         </Box>
       </motion.div>
     </Container>
-    </Suspense>
   );
 };
 
