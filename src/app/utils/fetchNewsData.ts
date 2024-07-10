@@ -2,7 +2,7 @@
 
 export const fetchNewsData = async (stockSymbol: string) => {
     const apiKey = '95ac3368f4254a298e9deef7f0db81a7'; // Replace with your actual API key
-    const url = `https://newsapi.org/v2/everything?q=${stockSymbol}%20stock&apiKey=${apiKey}`; // Adjusted query to include 'stock'
+    const url = `https://newsapi.org/v2/top-headlines?q=TSLA&apiKey=95ac3368f4254a298e9deef7f0db81a7`; // Adjusted query to include 'stock'
 
     try {
         const response = await fetch(url);
