@@ -2,7 +2,7 @@
 
 export const fetchNewsData = async (stockSymbol: string) => {
     const apiKey = ''; // Replace with your actual API key for thenewsapi.com
-    const url = `https://api.thenewsapi.com/v1/news/all?api_token=$LxfOFGHySf3AAhfsdIN4t4cXZ4efT5ErOwZbPrnL&search=${stockSymbol}&language=en&categories=business`;
+    const url = `https://api.thenewsapi.com/v1/news/all?api_token=LxfOFGHySf3AAhfsdIN4t4cXZ4efT5ErOwZbPrnL&search=${stockSymbol}&language=en&categories=business`;
 
     try {
         const response = await fetch(url);
