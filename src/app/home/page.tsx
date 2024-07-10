@@ -1,10 +1,8 @@
 "use client";
+import { Box, Container, Typography, Card, CardContent, useTheme, Button } from '@mui/material';
+import React, { useState, useEffect, Suspense } from 'react';
 import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
 import { motion } from 'framer-motion';
-import React, { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { Box, Container, Typography, Card, CardContent, useTheme } from '@mui/material';
-import SearchBar from '../components/SearchBar';
 import StockChart from '../components/StockChart';
 import { fetchStockData } from '../utils/fetchStockData';
 import { fetchNewsData } from '../utils/fetchNewsData';
@@ -61,7 +59,7 @@ const HomePage = () => {
     };
 
     fetchData();
-  }, [stock]);
+  }, [stock]); // Depend on stock to re-fetch data when it changes
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -94,8 +92,12 @@ const HomePage = () => {
         paddingRight: '8px',
       }}
     >
-      <Box alignContent="center" display="flex" justifyContent="space-between">
-        <SearchBar />
+      <Box display="flex" justifyContent="left" alignItems="center" mt={2} mb={2}>
+        <Button variant="contained" color="primary" onClick={() => window.location.href = '/'}>
+          Back to Home
+        </Button>
+      </Box>
+      <Box display="flex" justifyContent="center" alignItems="center" mt={2} mb={2}>
         <ThemeDropdown />
       </Box>
       <motion.div

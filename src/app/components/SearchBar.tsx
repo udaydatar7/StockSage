@@ -1,7 +1,6 @@
 // src/components/SearchBar.tsx
-"use client";
 
-import { useRouter } from 'next/router'; // Use useRouter from 'next/router' instead of 'next/navigation'
+import { useRouter } from 'next/navigation';
 import { Box, TextField, Button } from '@mui/material';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -11,7 +10,9 @@ const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = () => {
-    router.push(`/home?stock=${encodeURIComponent(searchQuery)}`); // Encode searchQuery to handle special characters
+    if (searchQuery) {
+      router.push(`/home?stock=${encodeURIComponent(searchQuery)}`);
+    }
   };
 
   return (
