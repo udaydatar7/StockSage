@@ -71,7 +71,7 @@ const HomePage = () => {
 
   const fadeInVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.5 } }
+    visible: { opacity: 1, transition: { duration: 1 } }
   };
 
   const fadeInUp = {
@@ -92,6 +92,10 @@ const HomePage = () => {
         paddingRight: '8px',
       }}
     >
+      <motion.div
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5 }}>
       <Box display="flex" justifyContent="left" alignItems="center" mt={2} mb={2}>
         <Button variant="contained" color="primary" onClick={() => window.location.href = '/'}>
           Back to Home
@@ -115,6 +119,10 @@ const HomePage = () => {
           sx={{ height: 'calc(100% - 64px)' }}
         >
           {predictions.length > 0 ? (
+            <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}>
             <Box
               display="flex"
               alignItems="center"
@@ -150,6 +158,7 @@ const HomePage = () => {
                 </motion.div>
               )}
             </Box>
+            </motion.div>
           ) : (
             <Typography variant="h6">Loading prediction...</Typography>
           )}
@@ -162,6 +171,10 @@ const HomePage = () => {
         variants={fadeInVariants}
         style={{ height: '100%' }}
       >
+        <motion.div
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5 }}>
         <Box
           display="flex"
           flexDirection="row"
@@ -243,6 +256,11 @@ const HomePage = () => {
             </Suspense>
           </Box>
         </Box>
+        </motion.div>
+        <motion.div
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5 }}>
         <Box
           display="flex"
           flexDirection="column"
@@ -254,6 +272,8 @@ const HomePage = () => {
         >
           <StockAnalysis sentiment={sentiment} articleSummary={articleSummary} />
         </Box>
+        </motion.div>
+      </motion.div>
       </motion.div>
     </Container>
   );
