@@ -1,5 +1,5 @@
 export const fetchStockPrediction = async (symbol: string): Promise<{ predictions: number[], sentiment?: number, article_titles_summary?: string }> => {
-  const apiUrl = `http://localhost:5000/predict`;
+  const apiUrl = `https://stock-sage-3v4h.onrender.com/predict`;
 
   try {
     const response = await fetch(apiUrl, {
